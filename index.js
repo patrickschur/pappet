@@ -235,7 +235,11 @@ async function openBrowser(url) {
             const path = await urlToPath(url);
 
             if (screenshot) {
-                await page.screenshot({ path: `${path}.png`, fullPage, width, height });
+                await page.screenshot({
+                    path: `${path}.png`,
+                    type: 'png',
+                    fullPage,
+                });
             }
 
             if (pdf) {
