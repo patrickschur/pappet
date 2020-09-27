@@ -100,7 +100,7 @@ pappet -rs --same-origin https://example.com
 pappet -rsL https://example.com
 ```
 
-##### Only follow relative links
+##### Using regular expression 
 ```sh
 pappet -rp --pattern "/articles/.*" https://example.com
 ```
