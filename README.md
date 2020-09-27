@@ -37,6 +37,7 @@ Options:
   --same-origin          Only visit pages with same origin
   --disable-js           Disable javascript
   --user-agent           Set user agent
+  --pattern              Only follow links that match the supplied regular expression
 ```
 
 Examples
@@ -97,4 +98,9 @@ pappet -rs --same-origin https://example.com
 ##### Only follow relative links
 ```sh
 pappet -rsL https://example.com
+```
+
+##### Only follow relative links
+```sh
+pappet -rp --pattern "/articles/.*" https://example.com
 ```
