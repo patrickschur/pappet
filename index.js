@@ -113,6 +113,10 @@ yargs.options({
     ['user-agent']: {
         string: true,
         describe: 'Set user agent',
+    },
+    ['pattern']: {
+        string: true,
+        describe: 'Only follow links that match the supplied regular expression',
     }
 });
 
@@ -120,7 +124,7 @@ yargs.usage('Usage: $0 [OPTION]... [URL]...');
 yargs.demandCommand().showHelpOnFail(true).wrap(yargs.terminalWidth());
 
 const argv = yargs.argv;
-const { screenshot, pdf, fullPage, width, height, recursive, userAgent, disableJs } = argv;
+const { screenshot, pdf, fullPage, width, height, recursive, userAgent, disableJs, pattern } = argv;
 
 const options = {
     args: [
@@ -137,11 +141,11 @@ const options = {
 const TABS = argv.tabs;
 const log = argv.quit ? function() {} : console.log;
 
-function findAllLinks({ sameOrigin, httpsOnly, relative }) {
+function findAllLinks({ sameOrigin, httpsOnly, relative, pattern }) {
     const allElements = [];
 
     function isAnchor(el) {
-        return el.localName === 'a' && el.href !== location.href && el.href;
+        return el.localName === 'a' && el.href !== location.href && !el.href.startsWith('mailto')  && el.href;
     }
 
     function isSameOrigin(el) {
@@ -154,6 +158,10 @@ function findAllLinks({ sameOrigin, httpsOnly, relative }) {
 
     function isRelative(el) {
         return relative ? el.attributes.href.value.indexOf('://') < 1 && el.attributes.href.value.indexOf('//') !== 0 : true;
+    }
+
+    function isPattern(el) {
+        return pattern ? new RegExp(pattern).test(el.href) : true;
     }
 
     function findAllLinks() {
@@ -169,6 +177,10 @@ function findAllLinks({ sameOrigin, httpsOnly, relative }) {
 
         if (relative) {
             links = links.filter(isRelative);
+        }
+
+        if (pattern) {
+            links = links.filter(isPattern);
         }
 
         return links.map(el => el.href);
