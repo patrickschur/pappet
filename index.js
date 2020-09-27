@@ -141,7 +141,7 @@ const options = {
 const TABS = argv.tabs;
 const log = argv.quit ? function() {} : console.log;
 
-function findAllLinks({ sameOrigin, httpsOnly, relative }) {
+function findAllLinks({ sameOrigin, httpsOnly, relative, pattern }) {
     const allElements = [];
 
     function isAnchor(el) {
@@ -161,7 +161,7 @@ function findAllLinks({ sameOrigin, httpsOnly, relative }) {
     }
 
     function isPattern(el) {
-        return pattern ? new RegExp('/music/.*').test(el.href) : true;
+        return pattern ? new RegExp(pattern).test(el.href) : true;
     }
 
     function findAllLinks() {
