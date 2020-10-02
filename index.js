@@ -39,6 +39,12 @@ yargs.options({
         describe: 'Take a PDF',
         default: false,
     },
+    m: {
+        alias: 'mhtml',
+        boolean: true,
+        describe: 'Save as mhtml',
+        default: false,
+    },
     r: {
         alias: 'recursive',
         boolean: true,
@@ -124,7 +130,7 @@ yargs.usage('Usage: $0 [OPTION]... [URL]...');
 yargs.demandCommand().showHelpOnFail(true).wrap(yargs.terminalWidth());
 
 const argv = yargs.argv;
-const { screenshot, pdf, fullPage, width, height, recursive, userAgent, disableJs, pattern } = argv;
+const { screenshot, pdf, fullPage, width, height, recursive, userAgent, disableJs, mhtml } = argv;
 
 const options = {
     args: [
@@ -201,7 +207,7 @@ function findAllLinks({ sameOrigin, httpsOnly, relative, pattern }) {
 
 async function urlToPath(url) {
     let [, ...paths] = new URL(url).href.split('/');
-    paths = paths.filter(path => path).map(path => slugify(path));
+    paths = paths.map(path => slugify(path)).filter(path => path);
 
     if (paths.length < 2) {
         paths.push(Math.random().toString(36).slice(2));
@@ -256,6 +262,12 @@ async function openBrowser(url) {
 
             if (pdf) {
                 await page.pdf({ path: `${path}.pdf`, width, height });
+            }
+
+            if (mhtml) {
+                const client = await page.target().createCDPSession();
+                const { data } = await client.send('Page.captureSnapshot', { format: 'mhtml' });
+                fs.writeFileSync(`${path}.mhtml`, data);            
             }
 
             if (recursive) {
