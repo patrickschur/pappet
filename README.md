@@ -23,6 +23,7 @@ Options:
   -t, --tabs             Set number of pages
   -s, --screenshot       Take a screenshot
   -p, --pdf              Take a PDF
+  -m, --mhtml            Save as mhtml
   -r, --recursive        Recursively visit links
   -l, --level            Set recursion depth
   -w, --width            Set page width
@@ -60,6 +61,11 @@ pappet -sf https://example.com
 ##### Take a PDF (-p, --pdf)
 ```sh
 pappet -p https://example.com
+```
+
+##### Save page as mhtml (-m, --mhtml)
+```sh
+pappet -m https://example.com
 ```
 
 ##### Crawl a website recursively and take screenshots (-r, --recursive)
