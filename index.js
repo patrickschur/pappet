@@ -16,9 +16,9 @@ yargs.options({
         default: false,
     },
     q: {
-        alias: 'quit',
+        alias: 'quiet',
         boolean: true,
-        describe: 'Be quit',
+        describe: 'Be quiet',
         default: false,
     },
     t: {
@@ -145,7 +145,7 @@ const options = {
 };
 
 const TABS = argv.tabs;
-const log = argv.quit ? function() {} : console.log;
+const log = argv.quiet ? function() {} : console.log;
 
 function findAllLinks({ sameOrigin, httpsOnly, relative, pattern }) {
     const allElements = [];
