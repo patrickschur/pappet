@@ -249,7 +249,7 @@ async function openBrowser(url) {
 
             log(url);
 
-            await page.goto(url);
+            await page.goto(url, { waitUntil: "networkidle2" });
             const path = await urlToPath(url);
 
             if (screenshot) {
